@@ -22,9 +22,3 @@ button {
   padding: 8px 12px;
   cursor: pointer;
 }
-
-.gallery__image {
-  width: 100%;
-  height: auto;
-  margin-top: 20px;
-}
