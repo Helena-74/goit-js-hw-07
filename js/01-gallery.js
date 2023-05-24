@@ -13,6 +13,7 @@
 // і прикладами.
 // Заміна значення атрибута src елемента <img> в модальному вікні перед відкриттям. Використовуй 
 // готову розмітку модального вікна із зображенням з прикладів бібліотеки basicLightbox.
+
 // Розмітка елемента галереї
 // Посилання на оригінальне зображення повинно зберігатися в data-атрибуті source на елементі <img>, 
 // і вказуватися в href посилання. Не додавай інші HTML теги або CSS класи, крім тих, що містяться 
@@ -33,13 +34,53 @@
 // буде перенаправлений на іншу сторінку. Заборони цю поведінку за замовчуванням.
 
 // Закриття з клавіатури
-
-
 // Додай закриття модального вікна після натискання клавіші Escape. Зроби так, щоб прослуховування 
 // клавіатури було тільки доти, доки відкрите модальне вікно. Бібліотека basicLightbox містить метод для програмного закриття модального вікна.
 
 
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
+
+const gallery = document.querySelector('.gallery');
+
+function createGalleryItem({ preview, original, description }) {
+  const galleryItem = document.createElement('li');
+  galleryItem.classList.add('gallery__item');
+
+  const galleryLink = document.createElement('a');
+  galleryLink.classList.add('gallery__link');
+  galleryLink.href = original;
+
+  const galleryImage = document.createElement('img');
+  galleryImage.classList.add('gallery__image');
+  galleryImage.src = preview;
+  galleryImage.setAttribute('data-source', original);
+  galleryImage.alt = description;
+
+  galleryLink.appendChild(galleryImage);
+  galleryItem.appendChild(galleryLink);
+
+  return galleryItem;
+}
+
+function renderGallery() {
+  const galleryItemsMarkup = galleryItems.map(item => createGalleryItem(item));
+  gallery.append(...galleryItemsMarkup);
+}
+
+renderGallery();
+
+function openModal(event) {
+  event.preventDefault();
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+
+  const largeImageUrl = event.target.dataset.source;
+  const instance = basicLightbox.create(`<img src="${largeImageUrl}">`);
+  instance.show();
+}
+
+gallery.addEventListener('click', openModal);
 
 console.log(galleryItems);
